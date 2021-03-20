@@ -1,0 +1,16 @@
+{
+  "name": "randomnumbergenerator",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Generates a sequence of true random numbers based on atmospheric noise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hamza Anas",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "uuid": "^8.3.2"
+  }
+}
