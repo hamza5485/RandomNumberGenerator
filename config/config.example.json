@@ -1,0 +1,13 @@
+{
+    "jsonrpc": "2.0",
+    "method": "generateIntegerSequences",
+    "params": {
+        "apiKey": "",
+        "n": 5,
+        "length": 5,
+        "min": 1,
+        "max": 6,
+        "replacement": true
+    },
+    "id": -1
+}
