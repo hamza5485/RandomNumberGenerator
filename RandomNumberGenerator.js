@@ -5,33 +5,53 @@ import config from './config';
 class RandomNumberGenerator {
 
     _url = "https://api.random.org/json-rpc/2/invoke";
+    _requestType = {
+        GENERATE_SEQUENCE: "generateIntegerSequences",
+        GENERATE_INTEGERS: "generateIntegers"
+    };
 
-    async generate() {
-        let formatted = [];
+    async generateSequence(max, count, length) {
+        let sequence = [];
         try {
-            const rawSequence = await this._fetch();
-            rawSequence.forEach(arr => {
-                let seq = "";
-                arr.forEach(el => {
-                    seq += el.toString();
-                });
-                formatted.push(parseInt(seq));
-            });
-            console.log(formatted)
-            return formatted;
+            sequence = await this._makeRequest(this._requestType.GENERATE_SEQUENCE, max, count, length);
         } catch (err) {
-            console.log(`[ERROR]: ${err}`);
+            console.log(`[ERROR]: `, err);
         }
-        return formatted;
+        return sequence;
     }
 
-    async _fetch() {
-        let params = config;
+    async generate(max, count) {
+        let random = [];
+        try {
+            random = await this._makeRequest(this._requestType.GENERATE_INTEGERS, max, count);
+            return random;
+        } catch (err) {
+            console.log(`[ERROR]: `, err);
+        }
+        return random
+    }
+
+    async _makeRequest(method, max, count, length = 0) {
+        let reqBody = config;
         const id = this._getUUID();
-        params.id = id;
+        reqBody.id = id;
+        reqBody.method = method;
+        reqBody.params.n = count;
+        reqBody.params.min = 1;
+        reqBody.params.max = max;
+        if (method === this._requestType.GENERATE_INTEGERS) {
+            reqBody.params.replacement = false;
+            delete reqBody.params.length;
+        }
+        if (method === this._requestType.GENERATE_SEQUENCE) reqBody.params.length = length;
+        return await this._fetch(reqBody, id);
+
+    }
+
+    async _fetch(config, id) {
         const req = await fetch(this._url, {
             method: 'POST',
-            body: JSON.stringify(params),
+            body: JSON.stringify(config),
             headers: { 'Content-Type': 'application/json' }
         });
         if (req.status === 200) {
