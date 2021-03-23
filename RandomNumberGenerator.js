@@ -10,7 +10,7 @@ class RandomNumberGenerator {
         GENERATE_INTEGERS: "generateIntegers"
     };
 
-    async generateSequence(max, count, length) {
+    async generateSequence(max, count, length, replacement) {
         let sequence = [];
         try {
             sequence = await this._makeRequest(this._requestType.GENERATE_SEQUENCE, max, count, length);
@@ -31,7 +31,7 @@ class RandomNumberGenerator {
         return random
     }
 
-    async _makeRequest(method, max, count, length = 0) {
+    async _makeRequest(method, max, count, length = 0, replacement = false) {
         let reqBody = config;
         const id = this._getUUID();
         reqBody.id = id;
@@ -40,7 +40,7 @@ class RandomNumberGenerator {
         reqBody.params.min = 1;
         reqBody.params.max = max;
         if (method === this._requestType.GENERATE_INTEGERS) {
-            reqBody.params.replacement = false;
+            reqBody.params.replacement = replacement;
             delete reqBody.params.length;
         }
         if (method === this._requestType.GENERATE_SEQUENCE) reqBody.params.length = length;
