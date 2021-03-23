@@ -13,7 +13,7 @@ class RandomNumberGenerator {
     async generateSequence(max, count, length, replacement) {
         let sequence = [];
         try {
-            sequence = await this._makeRequest(this._requestType.GENERATE_SEQUENCE, max, count, length);
+            sequence = await this._makeRequest(this._requestType.GENERATE_SEQUENCE, max, count, length, replacement);
         } catch (err) {
             console.log(`[ERROR]: `, err);
         }
