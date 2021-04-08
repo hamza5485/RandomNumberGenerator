@@ -39,16 +39,16 @@ class RandomNumberGenerator {
         reqBody.params.n = count;
         reqBody.params.min = 1;
         reqBody.params.max = max;
+        reqBody.params.replacement = replacement;
         if (method === this._requestType.GENERATE_INTEGERS) {
-            reqBody.params.replacement = replacement;
             delete reqBody.params.length;
         }
         if (method === this._requestType.GENERATE_SEQUENCE) reqBody.params.length = length;
-        return await this._fetch(reqBody, id);
+        return await this._fetch(reqBody);
 
     }
 
-    async _fetch(config, id) {
+    async _fetch(config) {
         const req = await fetch(this._url, {
             method: 'POST',
             body: JSON.stringify(config),
@@ -56,7 +56,7 @@ class RandomNumberGenerator {
         });
         if (req.status === 200) {
             let res = await req.json();
-            if (res.id === id) {
+            if (res.id === config.id) {
                 let sequence = res.result.random.data;
                 return sequence;
             } else {
